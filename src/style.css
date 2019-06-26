@@ -53,14 +53,44 @@
     border-radius: 4px;
 }
 
-.search__btn {
-    padding: 4px 8px;
+.process {
     margin-top: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.process__btn {
+    padding: 4px 8px;
+    margin-right: 16px;
     border: 1px solid gray;
     border-radius: 4px;
     font-size: 14px;
 }
 
-.search__btn:hover {
+.process__btn:hover {
     cursor: pointer;
+}
+
+.process__icon {
+    width: 32px;
+    height: 32px;
+}
+
+.process__icon--spin {
+    animation-name: spin;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+
+.process__icon--hidden {
+    visibility: hidden;
+}
+
+@keyframes spin {
+    from {
+        transform: rotateZ(0);
+    }
+    to {
+        transform: rotateZ(360deg);
+    }
 }
