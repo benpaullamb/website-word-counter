@@ -4,6 +4,7 @@ import Chart from 'chart.js';
 import style from './style.css';
 
 import TextAreaInput from './components/TextAreaInput.jsx';
+import SearchBar from './components/SearchBar.jsx';
 
 class App extends React.Component {
 
@@ -11,13 +12,14 @@ class App extends React.Component {
         super(props);
         this.state = {
             words: '',
-            websites: '',
+            search: '',
             countChart: null
         };
 
         this.onWordsChange = this.onWordsChange.bind(this);
-        this.onWebsitesChange = this.onWebsitesChange.bind(this);
+        this.onSearchChange = this.onSearchChange.bind(this);
         this.search = this.search.bind(this);
+        this.getWordCounts = this.getWordCounts.bind(this);
         this.updateCountChart = this.updateCountChart.bind(this);
 
         this.chartRef = React.createRef();
@@ -48,28 +50,24 @@ class App extends React.Component {
         });
     }
 
-    onWebsitesChange(websites) {
+    onSearchChange(search) {
         this.setState({
-            websites
+            search
         });
     }
 
     async search() {
         const wordsArray = this.state.words.toLowerCase().split('\n');
-        const websitesArray = this.state.websites.toLowerCase().split('\n');
-
         const uniqueWords = Array.from(new Set(wordsArray));
-        const uniqueWebsites = Array.from(new Set(websitesArray));
-
-        const wordCounts = await this.getWordCounts(uniqueWords, uniqueWebsites);
+        const wordCounts = await this.getWordCounts(uniqueWords, this.state.search);
         this.updateCountChart(wordCounts);
     }
 
-    async getWordCounts(words, websites) {
+    async getWordCounts(words, search) {
         try {
             const wordQueries = words.map(word => `words=${encodeURIComponent(word)}`);
-            const websiteQueries = websites.map(website => `websites=${encodeURIComponent(website)}`);
-            const res = await fetch(`/counts?${wordQueries.join('&')}&${websiteQueries.join('&')}`, {
+            const searchQuery = search.replace(/\s/gi, '+');
+            const res = await fetch(`/counts?${wordQueries.join('&')}&search=${searchQuery}`, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -104,10 +102,10 @@ class App extends React.Component {
         return (
             <div className="container">
                 <div className="page">
-                    <h1 className="page__title">Website Word Counter</h1>
+                    <h1 className="page__title">Web Word Counter</h1>
                     <div className="input">
                         <TextAreaInput title="Words to search for" onTextChange={this.onWordsChange}></TextAreaInput>
-                        <TextAreaInput title="Websites to search through" onTextChange={this.onWebsitesChange}></TextAreaInput>
+                        <SearchBar onChange={this.onSearchChange}></SearchBar>
                     </div>
                     <button className="search__btn" onClick={this.search}>Search</button>
                     <canvas height="128px" ref={this.chartRef}></canvas>

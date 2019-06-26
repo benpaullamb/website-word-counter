@@ -33,9 +33,24 @@
 
 .input__text {
     width: 100%;
+    padding: 8px;
     display: block;
     border-radius: 4px;
     resize: vertical;
+}
+
+.search__label {
+    margin-bottom: 8px;
+    display: block;
+    font-size: 20px;
+}
+
+.search__bar {
+    width: 100%;
+    padding: 8px;
+    display: block;
+    border: 1px solid gray;
+    border-radius: 4px;
 }
 
 .search__btn {

@@ -1,1 +1,1 @@
-# Website Word Counter
+# Web Word Counter
